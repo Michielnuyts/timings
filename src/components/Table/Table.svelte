@@ -1,29 +1,35 @@
 <script lang="ts">
 	import type { Episode } from '$lib/types';
+	import Tag from '../Tag/Tag.svelte';
 	import TableRow from './TableRow.svelte';
 
 	const props: { tableData: Episode } = $props();
 	const columns = [
 		{
 			header: 'Rundown',
-			key: 'rundown'
+			key: 'rundown',
+			cell: Tag,
 		},
 		{
 			header: 'Est. duration',
-			key: 'duration'
+			key: 'duration',
+			cell: Tag,
 		},
 		{
 			header: 'Front time',
-			key: 'frontTime'
+			key: 'frontTime',
+			cell: Tag,
 		},
 		{
 			header: 'End time',
-			key: 'endTime'
+			key: 'endTime',
+			cell: Tag,
 		},
 		{
 			header: 'Back time',
-			key: 'backTime'
-		}
+			key: 'backTime',
+			cell: Tag,
+		},
 	];
 
 	const data = [
@@ -32,15 +38,15 @@
 			duration: 2,
 			frontTime: 3,
 			endTime: 4,
-			backTime: 5
+			backTime: 5,
 		},
 		{
 			rundown: 7,
 			duration: 5,
 			frontTime: 11,
 			endTime: 12,
-			backTime: 21
-		}
+			backTime: 21,
+		},
 	];
 </script>
 
