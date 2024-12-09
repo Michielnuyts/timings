@@ -1,2 +1,10 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import { calculateTimings } from '$lib';
+	import timingsData from '../data/timings.json';
+	import episodeData from '../data/episode.json';
+	import Table from '../components/Table.svelte';
+
+	const result = calculateTimings(episodeData, timingsData);
+</script>
+
+<Table tableData={episodeData} />
