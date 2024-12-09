@@ -1,25 +1,23 @@
-import timings from '../data/timings.json';
-
 export type Timestamp = number;
-export type TimeInMS = number;
+export type TimeInMs = number;
 
 export interface Part {
 	/**
 	 * Projected length of the section.
 	 */
-	estimated_duration: TimeInMS;
+	estimated_duration: TimeInMs;
 	/**
 	 * Indicates the scheduled start time of a Part or Item.
 	 */
-	front_time: TimeInMS | null;
+	front_time: TimeInMs | null;
 	/**
 	 * Indicates the scheduled end time of a Part or Item.
 	 */
-	end_time: TimeInMS | null;
+	end_time: TimeInMs | null;
 	/**
 	 * Indicates the necessary start time to ensure the show ends on schedule.
 	 */
-	back_time: TimeInMS | null;
+	back_time: TimeInMs | null;
 }
 
 export interface Item extends Part {}

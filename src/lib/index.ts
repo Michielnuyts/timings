@@ -1,4 +1,4 @@
-import type { Episode, TimeInMS, Timings } from './types';
+import type { Episode, TimeInMs, Timings } from './types';
 
 export const calculateTimings = (episodeData: Episode, timingsData: Timings) => {
 	const clonedTimingsData = structuredClone(timingsData);
@@ -38,13 +38,13 @@ const setTimingsDataWith =
 const setItemTimingsData = setTimingsDataWith('item');
 const setPartTimingsData = setTimingsDataWith('part');
 
-const getFrontTime = (previousFrontTime: TimeInMS, previousEstimatedDuration: TimeInMS) =>
+const getFrontTime = (previousFrontTime: TimeInMs, previousEstimatedDuration: TimeInMs) =>
 	previousFrontTime + previousEstimatedDuration;
 
-const getEndTime = (frontTime: TimeInMS, estimatedDuration: TimeInMS) =>
+const getEndTime = (frontTime: TimeInMs, estimatedDuration: TimeInMs) =>
 	frontTime + estimatedDuration;
 
-const getBackTime = (previousBackTime?: TimeInMS | null, previousEstimatedDuration?: TimeInMS) => {
+const getBackTime = (previousBackTime?: TimeInMs | null, previousEstimatedDuration?: TimeInMs) => {
 	if (!previousBackTime || !previousEstimatedDuration) {
 		return 0;
 	}
