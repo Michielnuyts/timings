@@ -1,7 +1,7 @@
 {
 	"episode": {
-		"on_air_time": 1712235600,
-		"off_air_time": 1712238300
+		"on_air_time": 1712235600000,
+		"off_air_time": 1712238300000
 	},
 	"part": {
 		"14080af8-7712-47be-8802-22a0fb83cf59": {

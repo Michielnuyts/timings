@@ -22,8 +22,16 @@
 	</div>
 {/snippet}
 
+{#snippet placeholder()}
+	<div class="w-[80px]"></div>
+{/snippet}
+
 <div class="flex flex-row items-center">
-	{@render icon(props.row.id)}
+	{#if props.depth === 1}
+		{@render icon(props.row.id)}
+	{:else}
+		{@render placeholder()}
+	{/if}
 
 	{#each props.columns as column}
 		<TableCell row={props.row} {column} isChild={props.depth > 1} />

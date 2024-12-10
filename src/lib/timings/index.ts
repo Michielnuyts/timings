@@ -3,14 +3,12 @@ import episodeData from '../../data/episode.json';
 import timingsData from '../../data/timings.json';
 
 export const calculateTimings = (episodeData: Episode, timingsData: Timings) => {
-	console.log(timingsData);
 	const clonedTimingsData = structuredClone(timingsData);
 
-	setPartTimingsData(episodeData, clonedTimingsData);
-	setItemTimingsData(episodeData, clonedTimingsData);
-	// setTimingsData(episodeData, clonedTimingsData);
+	// setPartTimingsData(episodeData, clonedTimingsData);
+	// setItemTimingsData(episodeData, clonedTimingsData);
+	setTimingsData(episodeData, clonedTimingsData);
 
-	console.log(clonedTimingsData);
 	return clonedTimingsData;
 };
 
@@ -21,39 +19,44 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 	let previousPartId: string | undefined = undefined;
 	let previousItemId: string | undefined = undefined;
 
-	const previousPart = previousPartId ? timingsData.part[previousPartId] : undefined;
-	const previousItem = previousItemId ? timingsData.item[previousItemId] : undefined;
-
-	episodeData.episode.parts.forEach((partId) => {
+	episodeData.episode.parts.forEach((partId, partIndex) => {
+		const isFirstPart = partIndex === 0;
 		const currentPart = timingsData.part[partId];
-		const frontTime = getFrontTime(
-			previousPart?.front_time ?? startAirTime,
-			previousPart?.estimated_duration ?? currentPart.estimated_duration,
-		);
+		const previousPart = previousPartId ? timingsData.part[previousPartId] : undefined;
+		const frontTime = isFirstPart
+			? startAirTime
+			: getFrontTime(
+					previousPart?.front_time ?? startAirTime,
+					previousPart?.estimated_duration ?? currentPart.estimated_duration,
+				);
 		const endTime = getEndTime(frontTime, currentPart.estimated_duration);
 		const backTime = getBackTime(
 			previousPart?.back_time ?? endAirTime,
 			previousPart?.estimated_duration ?? currentPart.estimated_duration,
 		);
-
-		timingsData.part[partId] = {
+		const partWithTimings = {
 			...currentPart,
 			front_time: frontTime,
 			end_time: endTime,
 			back_time: backTime,
 		};
-
+		timingsData.part[partId] = partWithTimings;
 		previousPartId = partId;
 
 		const items = episodeData.part[partId].items;
 
 		items.forEach((itemId, itemIndex) => {
+			const isFirstItem = itemIndex === 0;
 			const isLastItem = itemIndex === items.length - 1;
 			const currentItem = timingsData.item[itemId];
-			const frontTime = getFrontTime(
-				previousItem?.front_time ?? startAirTime,
-				previousItem?.estimated_duration ?? currentItem.estimated_duration,
-			);
+			const previousItem = previousItemId ? timingsData.item[previousItemId] : undefined;
+			console.log({ currentItem, previousItem });
+			const frontTime = isFirstItem
+				? partWithTimings.front_time
+				: getFrontTime(
+						previousItem?.front_time ?? startAirTime,
+						previousItem?.estimated_duration ?? currentItem.estimated_duration,
+					);
 			const endTime = getEndTime(frontTime, currentItem.estimated_duration);
 			const backTime = isLastItem
 				? currentPart.end_time
@@ -69,7 +72,7 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 				back_time: backTime,
 			};
 
-			previousPartId = partId;
+			previousItemId = itemId;
 		});
 	});
 };
@@ -110,7 +113,6 @@ const setItemTimingsData = setTimingsDataWith('item');
 const setPartTimingsData = setTimingsDataWith('part');
 
 const getFrontTime = (previousFrontTime: TimeInMs, previousEstimatedDuration: TimeInMs) => {
-	console.log(previousFrontTime, previousEstimatedDuration);
 	return previousFrontTime + previousEstimatedDuration;
 };
 
