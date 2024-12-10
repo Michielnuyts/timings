@@ -46,7 +46,7 @@
 	<div class="flex flex-row">
 		<div class="w-[80px]"></div>
 		{#each columns as column}
-			<div class="w-40 border-b-2 bg-slate-300 p-2 text-slate-700">{column.header}</div>
+			<div class="w-[180px] border-b-2 bg-slate-300 p-2 text-slate-700">{column.header}</div>
 		{/each}
 	</div>
 

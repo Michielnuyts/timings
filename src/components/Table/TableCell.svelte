@@ -4,7 +4,7 @@
 </script>
 
 <div
-	class={`flex w-40 flex-row border-b border-slate-950 ${props.isChild ? 'bg-slate-300' : 'bg-slate-400'} p-2`}
+	class={`flex w-[180px] flex-row border-b border-slate-950 ${props.isChild ? 'bg-slate-300' : 'bg-slate-400'} p-2`}
 >
 	<CellComponent value={props.row[props.column.key]} />
 </div>

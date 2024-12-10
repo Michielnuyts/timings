@@ -8,42 +8,106 @@ export const calculateTimings = (episodeData: Episode, timingsData: Timings) => 
 
 	setPartTimingsData(episodeData, clonedTimingsData);
 	setItemTimingsData(episodeData, clonedTimingsData);
+	// setTimingsData(episodeData, clonedTimingsData);
 
 	console.log(clonedTimingsData);
 	return clonedTimingsData;
 };
 
+// const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
+// 	const startAirTime = timingsData.episode.on_air_time;
+// 	const endAirTime = timingsData.episode.off_air_time;
+
+// 	let previousPartId: string | undefined = undefined;
+// 	let previousItemId: string | undefined = undefined;
+
+// 	const previousPart = previousPartId ? timingsData.part[previousPartId] : undefined;
+// 	const previousItem = previousItemId ? timingsData.item[previousItemId] : undefined;
+
+// 	episodeData.episode.parts.forEach((partId) => {
+// 		const currentPart = timingsData.part[partId];
+// 		const frontTime = getFrontTime(
+// 			previousPart?.front_time ?? startAirTime,
+// 			previousPart?.estimated_duration ?? currentPart.estimated_duration,
+// 		);
+// 		const endTime = getEndTime(frontTime, currentPart.estimated_duration);
+// 		const backTime = getBackTime(
+// 			previousPart?.back_time ?? endAirTime,
+// 			previousPart?.estimated_duration ?? currentPart.estimated_duration,
+// 		);
+
+// 		timingsData.part[partId] = {
+// 			...currentPart,
+// 			front_time: frontTime,
+// 			end_time: endTime,
+// 			back_time: backTime,
+// 		};
+
+// 		previousPartId = partId;
+
+// 		episodeData.part[partId].items.forEach((itemId) => {
+// 			const currentItem = timingsData.item[itemId];
+// 			const frontTime = getFrontTime(
+// 				previousItem?.front_time ?? startAirTime,
+// 				previousItem?.estimated_duration ?? currentItem.estimated_duration,
+// 			);
+// 			const endTime = getEndTime(frontTime, currentItem.estimated_duration);
+// 			const backTime = getBackTime(
+// 				previousItem?.back_time ?? endAirTime,
+// 				previousItem?.estimated_duration ?? currentItem.estimated_duration,
+// 			);
+
+// 			timingsData.part[partId] = {
+// 				...currentItem,
+// 				front_time: frontTime,
+// 				end_time: endTime,
+// 				back_time: backTime,
+// 			};
+
+// 			previousPartId = partId;
+// 		});
+// 	});
+// };
+
 const setTimingsDataWith =
 	(key: 'item' | 'part') => (episodeData: Episode, timingsData: Timings) => {
-		let previousItemId: string | undefined = undefined;
+		const startAirTime = timingsData.episode.on_air_time;
+		const endAirTime = timingsData.episode.off_air_time;
 
-		Object.keys(episodeData[key]).forEach((itemId) => {
-			const previousItem = previousItemId ? timingsData?.[key]?.[previousItemId] : undefined;
-			const currentItem = timingsData[key][itemId];
+		let previousId: string | undefined = undefined;
+
+		Object.keys(episodeData[key]).forEach((id) => {
+			const previous = previousId ? timingsData?.[key]?.[previousId] : undefined;
+			const current = timingsData[key][id];
 
 			const frontTime = getFrontTime(
-				previousItem?.front_time ?? timingsData.episode.on_air_time,
-				previousItem?.estimated_duration ?? currentItem?.estimated_duration,
+				previous?.front_time ?? startAirTime,
+				previous?.estimated_duration ?? current?.estimated_duration,
 			);
-			const endTime = getEndTime(frontTime, currentItem?.estimated_duration);
-			const backTime = getBackTime(previousItem?.back_time, previousItem?.estimated_duration);
+			const endTime = getEndTime(frontTime, current?.estimated_duration);
+			const backTime = getBackTime(
+				previous?.back_time ?? endAirTime,
+				previous?.estimated_duration ?? current.estimated_duration,
+			);
 
-			timingsData[key][itemId] = {
-				...currentItem,
+			timingsData[key][id] = {
+				...current,
 				front_time: frontTime,
 				end_time: endTime,
 				back_time: backTime,
 			};
 
-			previousItemId = itemId;
+			previousId = id;
 		});
 	};
 
 const setItemTimingsData = setTimingsDataWith('item');
 const setPartTimingsData = setTimingsDataWith('part');
 
-const getFrontTime = (previousFrontTime: TimeInMs, previousEstimatedDuration: TimeInMs) =>
-	previousFrontTime + previousEstimatedDuration;
+const getFrontTime = (previousFrontTime: TimeInMs, previousEstimatedDuration: TimeInMs) => {
+	console.log(previousFrontTime, previousEstimatedDuration);
+	return previousFrontTime + previousEstimatedDuration;
+};
 
 const getEndTime = (frontTime: TimeInMs, estimatedDuration: TimeInMs) =>
 	frontTime + estimatedDuration;
