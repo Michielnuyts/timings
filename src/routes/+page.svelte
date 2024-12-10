@@ -7,4 +7,6 @@
 	const result = calculateTimings(episodeData, timingsData);
 </script>
 
-<Table tableData={episodeData} />
+<div class="p-4">
+	<Table tableData={episodeData} />
+</div>

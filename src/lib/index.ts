@@ -1,4 +1,6 @@
 import type { Episode, TimeInMs, Timings } from './types';
+import episodeData from '../data/episode.json';
+import timingsData from '../data/timings.json';
 
 export const calculateTimings = (episodeData: Episode, timingsData: Timings) => {
 	const clonedTimingsData = structuredClone(timingsData);
@@ -19,7 +21,7 @@ const setTimingsDataWith =
 
 			const frontTime = getFrontTime(
 				previousItem?.front_time ?? currentItem?.estimated_duration,
-				previousItem?.estimated_duration ?? currentItem?.estimated_duration
+				previousItem?.estimated_duration ?? currentItem?.estimated_duration,
 			);
 			const endTime = getEndTime(frontTime, currentItem?.estimated_duration);
 			const backTime = getBackTime(previousItem?.back_time, previousItem?.estimated_duration);
@@ -28,7 +30,7 @@ const setTimingsDataWith =
 				...currentItem,
 				front_time: frontTime,
 				end_time: endTime,
-				back_time: backTime
+				back_time: backTime,
 			};
 
 			previousItemId = itemId;
@@ -50,4 +52,27 @@ const getBackTime = (previousBackTime?: TimeInMs | null, previousEstimatedDurati
 	}
 
 	return previousBackTime - previousEstimatedDuration;
+};
+
+export const getTableData = () => {
+	const timings = calculateTimings(episodeData, timingsData);
+
+	return Object.entries(episodeData.part).map(([partId, partData]) => {
+		const partTimings = timings.part[partId];
+
+		return {
+			...partData,
+			...partTimings,
+			children: partData.items.map((itemId) => {
+				// @ts-expect-error fix key
+				const itemData = episodeData.item[itemId];
+				const itemTimings = timings.item[itemId];
+
+				return {
+					...itemData,
+					...itemTimings,
+				};
+			}),
+		};
+	});
 };

@@ -2,6 +2,6 @@
 	const props: { value: string } = $props();
 </script>
 
-<div>
+<div class="rounded-md bg-slate-700 px-4 text-white">
 	{props.value}
 </div>
