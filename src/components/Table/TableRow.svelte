@@ -7,7 +7,7 @@
 	import type { Column } from './types';
 
 	const props: {
-		depth: number;
+		isChildRow: boolean;
 		rowOpenState: Record<string, boolean>;
 		row: Row;
 		columns: Column<Row>[];
@@ -29,13 +29,13 @@
 {/snippet}
 
 <div class="flex flex-row items-center">
-	{#if props.depth === 1}
-		{@render icon(props.row.id)}
-	{:else}
+	{#if props.isChildRow}
 		{@render placeholder()}
+	{:else}
+		{@render icon(props.row.id)}
 	{/if}
 
 	{#each props.columns as column}
-		<TableCell row={props.row} {column} isChild={props.depth > 1} />
+		<TableCell row={props.row} {column} isChild={props.isChildRow} />
 	{/each}
 </div>

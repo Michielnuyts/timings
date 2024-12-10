@@ -23,11 +23,17 @@
 </script>
 
 {#each data as row}
-	<TableRow depth={1} {row} {columns} {rowOpenState} {toggleRowCollapsedState} />
+	<TableRow {row} {columns} {rowOpenState} {toggleRowCollapsedState} isChildRow={false} />
 
 	{#if row.children && row?.children?.length > 0 && rowOpenState[row.id]}
 		{#each row.children as childRow}
-			<TableRow depth={2} row={childRow} {columns} {rowOpenState} {toggleRowCollapsedState} />
+			<TableRow
+				row={childRow}
+				{columns}
+				{rowOpenState}
+				{toggleRowCollapsedState}
+				isChildRow={true}
+			/>
 		{/each}
 	{/if}
 {/each}
