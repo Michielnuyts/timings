@@ -3,11 +3,13 @@ import episodeData from '../data/episode.json';
 import timingsData from '../data/timings.json';
 
 export const calculateTimings = (episodeData: Episode, timingsData: Timings) => {
+	console.log(timingsData);
 	const clonedTimingsData = structuredClone(timingsData);
 
-	setItemTimingsData(episodeData, clonedTimingsData);
 	setPartTimingsData(episodeData, clonedTimingsData);
+	setItemTimingsData(episodeData, clonedTimingsData);
 
+	console.log(clonedTimingsData);
 	return clonedTimingsData;
 };
 
@@ -15,12 +17,12 @@ const setTimingsDataWith =
 	(key: 'item' | 'part') => (episodeData: Episode, timingsData: Timings) => {
 		let previousItemId: string | undefined = undefined;
 
-		Object.keys(episodeData.item).forEach((itemId) => {
+		Object.keys(episodeData[key]).forEach((itemId) => {
 			const previousItem = previousItemId ? timingsData?.[key]?.[previousItemId] : undefined;
 			const currentItem = timingsData[key][itemId];
 
 			const frontTime = getFrontTime(
-				previousItem?.front_time ?? currentItem?.estimated_duration,
+				previousItem?.front_time ?? timingsData.episode.on_air_time,
 				previousItem?.estimated_duration ?? currentItem?.estimated_duration,
 			);
 			const endTime = getEndTime(frontTime, currentItem?.estimated_duration);
@@ -65,7 +67,7 @@ export const getTableData = () => {
 			title: 'Part',
 			subTitle: `Part ${index + 1}`,
 			...partTimings,
-			children: partData.items.map((itemId, itemIndex) => {
+			children: partData.items.map((itemId) => {
 				// @ts-expect-error fix key
 				const itemData = episodeData.item[itemId];
 				const itemTimings = timings.item[itemId];

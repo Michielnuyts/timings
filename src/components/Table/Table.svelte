@@ -2,8 +2,9 @@
 	import { getTableData } from '$lib';
 	import TagCell from './Cells/TagCell.svelte';
 	import TextCell from './Cells/TextCell.svelte';
-	import TimeCell from './Cells/TimeCell.svelte';
+	import DateTimeCell from './Cells/DateTimeCell.svelte';
 	import TableBody from './TableBody.svelte';
+	import DurationCell from './Cells/DurationCell.svelte';
 
 	const columns = [
 		{
@@ -19,22 +20,22 @@
 		{
 			header: 'Est. duration',
 			key: 'estimated_duration',
-			cell: TimeCell,
+			cell: DurationCell,
 		},
 		{
 			header: 'Front time',
 			key: 'front_time',
-			cell: TimeCell,
+			cell: DateTimeCell,
 		},
 		{
 			header: 'End time',
 			key: 'end_time',
-			cell: TimeCell,
+			cell: DateTimeCell,
 		},
 		{
 			header: 'Back time',
 			key: 'back_time',
-			cell: TimeCell,
+			cell: DateTimeCell,
 		},
 	];
 
