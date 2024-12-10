@@ -57,19 +57,23 @@ const getBackTime = (previousBackTime?: TimeInMs | null, previousEstimatedDurati
 export const getTableData = () => {
 	const timings = calculateTimings(episodeData, timingsData);
 
-	return Object.entries(episodeData.part).map(([partId, partData]) => {
+	return Object.entries(episodeData.part).map(([partId, partData], index) => {
 		const partTimings = timings.part[partId];
 
 		return {
 			...partData,
+			title: 'Part',
+			subTitle: `Part ${index + 1}`,
 			...partTimings,
-			children: partData.items.map((itemId) => {
+			children: partData.items.map((itemId, itemIndex) => {
 				// @ts-expect-error fix key
 				const itemData = episodeData.item[itemId];
 				const itemTimings = timings.item[itemId];
 
 				return {
 					...itemData,
+					title: 'Item',
+					subTitle: itemData.title,
 					...itemTimings,
 				};
 			}),

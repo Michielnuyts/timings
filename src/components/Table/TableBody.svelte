@@ -1,7 +1,4 @@
 <script lang="ts">
-	import ChevronDown from '../Icons/ChevronDown.svelte';
-	import ChevronRight from '../Icons/ChevronRight.svelte';
-	import TableCell from './TableCell.svelte';
 	import TableRow from './TableRow.svelte';
 
 	const props: { columns: any[]; data: any[] } = $props();
@@ -23,27 +20,23 @@
 	};
 </script>
 
-<!-- open/closed chevron icon -->
-{#snippet icon(rowId: string)}
-	{@const Icon = rowOpenState[rowId] ? ChevronDown : ChevronRight}
-	<Icon onclick={() => toggleRowCollapsedState(rowId)} />
-{/snippet}
-
 {#each props.data as row, index}
 	<TableRow
+		depth={1}
 		{row}
 		columns={props.columns}
-		rowNumber={index + 1}
 		{rowOpenState}
 		{toggleRowCollapsedState}
+		rowNumber={1}
 	/>
 
 	{#if row.children.length > 0 && rowOpenState[row.id]}
 		{#each row.children as row, childIndex}
 			<TableRow
+				depth={2}
 				{row}
 				columns={props.columns}
-				rowNumber={index + childIndex + 1}
+				rowNumber={1}
 				{rowOpenState}
 				{toggleRowCollapsedState}
 			/>

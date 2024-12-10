@@ -4,26 +4,27 @@
 	import TableCell from './TableCell.svelte';
 
 	const props: {
+		depth: number;
 		rowOpenState: any;
 		row: any;
 		columns: any[];
 		toggleRowCollapsedState: any;
-		rowNumber: number;
+		rowNumber?: number;
 	} = $props();
 </script>
 
 <!-- open/closed chevron icon -->
 {#snippet icon(rowId: string)}
 	{@const Icon = props.rowOpenState[rowId] ? ChevronDown : ChevronRight}
-	<Icon onclick={() => props.toggleRowCollapsedState(rowId)} />
+	<div class="flex w-20 items-center justify-center">
+		<Icon onclick={() => props.toggleRowCollapsedState(rowId)} />
+	</div>
 {/snippet}
 
 <div class="flex flex-row items-center">
-	<div class="flex w-[30px] items-center text-slate-800">{props.rowNumber}</div>
-
 	{@render icon(props.row.id)}
 
 	{#each props.columns as column}
-		<TableCell row={props.row} {column} />
+		<TableCell row={props.row} {column} isChild={props.depth > 1} />
 	{/each}
 </div>
