@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Row } from '$lib/timings';
+	import IconButton from '../IconButton/IconButton.svelte';
 	import ChevronDown from '../Icons/ChevronDown.svelte';
 	import ChevronRight from '../Icons/ChevronRight.svelte';
 	import TableCell from './TableCell.svelte';
@@ -18,7 +19,7 @@
 {#snippet icon(rowId: string)}
 	{@const Icon = props.rowOpenState[rowId] ? ChevronDown : ChevronRight}
 	<div class="flex w-20 items-center justify-center">
-		<Icon onclick={() => props.toggleRowCollapsedState(rowId)} />
+		<IconButton children={Icon} onclick={() => props.toggleRowCollapsedState(rowId)} />
 	</div>
 {/snippet}
 

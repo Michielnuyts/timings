@@ -48,7 +48,6 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 			const isLastItem = itemIndex === items.length - 1;
 			const currentItem = timingsData.item[itemId];
 			const previousItem = previousItemId ? timingsData.item[previousItemId] : undefined;
-			console.log({ currentItem, previousItem });
 			const frontTime = isFirstItem
 				? partWithTimings.front_time
 				: getFrontTime(

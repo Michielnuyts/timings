@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
+import type { TimeInMs } from './types';
 
-export const timestampToHoursAndMinutes = (timeinSeconds: number) => {
-	const date = new Date(timeinSeconds);
+export const formatTimestamp = (timeInMs: TimeInMs) => {
+	const date = new Date(timeInMs);
 
-	return format(date, 'HH:mm');
+	return format(date, 'HH:mm:ss');
 };

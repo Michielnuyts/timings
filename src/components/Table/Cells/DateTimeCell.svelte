@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { timestampToHoursAndMinutes } from '$lib/timings/utils';
+	import { formatTimestamp } from '$lib/timings/utils';
 
 	const props: { value: number } = $props();
 
-	const formattedTimeValue = timestampToHoursAndMinutes(props.value);
+	const formattedTimeValue = formatTimestamp(props.value);
 </script>
 
 <div>
