@@ -5,8 +5,6 @@ import timingsData from '../../data/timings.json';
 export const calculateTimings = (episodeData: Episode, timingsData: Timings) => {
 	const clonedTimingsData = structuredClone(timingsData);
 
-	// setPartTimingsData(episodeData, clonedTimingsData);
-	// setItemTimingsData(episodeData, clonedTimingsData);
 	setTimingsData(episodeData, clonedTimingsData);
 
 	return clonedTimingsData;
@@ -59,13 +57,13 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 					);
 			const endTime = getEndTime(frontTime, currentItem.estimated_duration);
 			const backTime = isLastItem
-				? currentPart.end_time
+				? partWithTimings.end_time
 				: getBackTime(
 						previousItem?.back_time ?? endAirTime,
 						previousItem?.estimated_duration ?? currentItem.estimated_duration,
 					);
 
-			timingsData.part[partId] = {
+			timingsData.item[itemId] = {
 				...currentItem,
 				front_time: frontTime,
 				end_time: endTime,
@@ -76,41 +74,6 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 		});
 	});
 };
-
-const setTimingsDataWith =
-	(key: 'item' | 'part') => (episodeData: Episode, timingsData: Timings) => {
-		const startAirTime = timingsData.episode.on_air_time;
-		const endAirTime = timingsData.episode.off_air_time;
-
-		let previousId: string | undefined = undefined;
-
-		Object.keys(episodeData[key]).forEach((id) => {
-			const previous = previousId ? timingsData?.[key]?.[previousId] : undefined;
-			const current = timingsData[key][id];
-
-			const frontTime = getFrontTime(
-				previous?.front_time ?? startAirTime,
-				previous?.estimated_duration ?? current?.estimated_duration,
-			);
-			const endTime = getEndTime(frontTime, current?.estimated_duration);
-			const backTime = getBackTime(
-				previous?.back_time ?? endAirTime, // TODO this is wrong
-				previous?.estimated_duration ?? current.estimated_duration,
-			);
-
-			timingsData[key][id] = {
-				...current,
-				front_time: frontTime,
-				end_time: endTime,
-				back_time: backTime,
-			};
-
-			previousId = id;
-		});
-	};
-
-const setItemTimingsData = setTimingsDataWith('item');
-const setPartTimingsData = setTimingsDataWith('part');
 
 const getFrontTime = (previousFrontTime: TimeInMs, previousEstimatedDuration: TimeInMs) => {
 	return previousFrontTime + previousEstimatedDuration;
