@@ -51,7 +51,5 @@
 		{/each}
 	</div>
 
-	<div class="flex flex-col">
-		<TableBody {data} {columns} />
-	</div>
+	<TableBody {data} {columns} />
 </div>

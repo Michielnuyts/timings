@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Row } from '$lib/timings';
-	import TableRow from './TableRow.svelte';
 	import type { Column } from './types';
+	import TableRow from './TableRow.svelte';
 
 	const { columns, data }: { columns: Column<Row>[]; data: Row[] } = $props();
 
@@ -22,18 +22,20 @@
 	};
 </script>
 
-{#each data as row}
-	<TableRow {row} {columns} {rowOpenState} {toggleRowCollapsedState} isChildRow={false} />
+<div class="flex flex-col">
+	{#each data as row}
+		<TableRow {row} {columns} {rowOpenState} {toggleRowCollapsedState} isChildRow={false} />
 
-	{#if row.children && row?.children?.length > 0 && rowOpenState[row.id]}
-		{#each row.children as childRow}
-			<TableRow
-				row={childRow}
-				{columns}
-				{rowOpenState}
-				{toggleRowCollapsedState}
-				isChildRow={true}
-			/>
-		{/each}
-	{/if}
-{/each}
+		{#if row.children && row?.children?.length > 0 && rowOpenState[row.id]}
+			{#each row.children as childRow}
+				<TableRow
+					row={childRow}
+					{columns}
+					{rowOpenState}
+					{toggleRowCollapsedState}
+					isChildRow={true}
+				/>
+			{/each}
+		{/if}
+	{/each}
+</div>
