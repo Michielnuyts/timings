@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { timestampToHoursAndMinutes } from '$lib/utils';
+	import { timestampToHoursAndMinutes } from '$lib/timings/utils';
 
 	const props: { value: number } = $props();
 

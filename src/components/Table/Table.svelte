@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { getTableData } from '$lib';
+	import { getTableData, type Row } from '$lib/timings';
 	import TagCell from './Cells/TagCell.svelte';
 	import TextCell from './Cells/TextCell.svelte';
 	import DateTimeCell from './Cells/DateTimeCell.svelte';
 	import TableBody from './TableBody.svelte';
 	import DurationCell from './Cells/DurationCell.svelte';
+	import type { Column } from './types';
 
-	const columns = [
+	const columns: Column<Row>[] = [
 		{
 			header: 'Rundown',
 			key: 'title',

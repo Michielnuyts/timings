@@ -1,6 +1,6 @@
 import type { Episode, TimeInMs, Timings } from './types';
-import episodeData from '../data/episode.json';
-import timingsData from '../data/timings.json';
+import episodeData from '../../data/episode.json';
+import timingsData from '../../data/timings.json';
 
 export const calculateTimings = (episodeData: Episode, timingsData: Timings) => {
 	console.log(timingsData);
@@ -14,60 +14,65 @@ export const calculateTimings = (episodeData: Episode, timingsData: Timings) => 
 	return clonedTimingsData;
 };
 
-// const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
-// 	const startAirTime = timingsData.episode.on_air_time;
-// 	const endAirTime = timingsData.episode.off_air_time;
+const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
+	const startAirTime = timingsData.episode.on_air_time;
+	const endAirTime = timingsData.episode.off_air_time;
 
-// 	let previousPartId: string | undefined = undefined;
-// 	let previousItemId: string | undefined = undefined;
+	let previousPartId: string | undefined = undefined;
+	let previousItemId: string | undefined = undefined;
 
-// 	const previousPart = previousPartId ? timingsData.part[previousPartId] : undefined;
-// 	const previousItem = previousItemId ? timingsData.item[previousItemId] : undefined;
+	const previousPart = previousPartId ? timingsData.part[previousPartId] : undefined;
+	const previousItem = previousItemId ? timingsData.item[previousItemId] : undefined;
 
-// 	episodeData.episode.parts.forEach((partId) => {
-// 		const currentPart = timingsData.part[partId];
-// 		const frontTime = getFrontTime(
-// 			previousPart?.front_time ?? startAirTime,
-// 			previousPart?.estimated_duration ?? currentPart.estimated_duration,
-// 		);
-// 		const endTime = getEndTime(frontTime, currentPart.estimated_duration);
-// 		const backTime = getBackTime(
-// 			previousPart?.back_time ?? endAirTime,
-// 			previousPart?.estimated_duration ?? currentPart.estimated_duration,
-// 		);
+	episodeData.episode.parts.forEach((partId) => {
+		const currentPart = timingsData.part[partId];
+		const frontTime = getFrontTime(
+			previousPart?.front_time ?? startAirTime,
+			previousPart?.estimated_duration ?? currentPart.estimated_duration,
+		);
+		const endTime = getEndTime(frontTime, currentPart.estimated_duration);
+		const backTime = getBackTime(
+			previousPart?.back_time ?? endAirTime,
+			previousPart?.estimated_duration ?? currentPart.estimated_duration,
+		);
 
-// 		timingsData.part[partId] = {
-// 			...currentPart,
-// 			front_time: frontTime,
-// 			end_time: endTime,
-// 			back_time: backTime,
-// 		};
+		timingsData.part[partId] = {
+			...currentPart,
+			front_time: frontTime,
+			end_time: endTime,
+			back_time: backTime,
+		};
 
-// 		previousPartId = partId;
+		previousPartId = partId;
 
-// 		episodeData.part[partId].items.forEach((itemId) => {
-// 			const currentItem = timingsData.item[itemId];
-// 			const frontTime = getFrontTime(
-// 				previousItem?.front_time ?? startAirTime,
-// 				previousItem?.estimated_duration ?? currentItem.estimated_duration,
-// 			);
-// 			const endTime = getEndTime(frontTime, currentItem.estimated_duration);
-// 			const backTime = getBackTime(
-// 				previousItem?.back_time ?? endAirTime,
-// 				previousItem?.estimated_duration ?? currentItem.estimated_duration,
-// 			);
+		const items = episodeData.part[partId].items;
 
-// 			timingsData.part[partId] = {
-// 				...currentItem,
-// 				front_time: frontTime,
-// 				end_time: endTime,
-// 				back_time: backTime,
-// 			};
+		items.forEach((itemId, itemIndex) => {
+			const isLastItem = itemIndex === items.length - 1;
+			const currentItem = timingsData.item[itemId];
+			const frontTime = getFrontTime(
+				previousItem?.front_time ?? startAirTime,
+				previousItem?.estimated_duration ?? currentItem.estimated_duration,
+			);
+			const endTime = getEndTime(frontTime, currentItem.estimated_duration);
+			const backTime = isLastItem
+				? currentPart.end_time
+				: getBackTime(
+						previousItem?.back_time ?? endAirTime,
+						previousItem?.estimated_duration ?? currentItem.estimated_duration,
+					);
 
-// 			previousPartId = partId;
-// 		});
-// 	});
-// };
+			timingsData.part[partId] = {
+				...currentItem,
+				front_time: frontTime,
+				end_time: endTime,
+				back_time: backTime,
+			};
+
+			previousPartId = partId;
+		});
+	});
+};
 
 const setTimingsDataWith =
 	(key: 'item' | 'part') => (episodeData: Episode, timingsData: Timings) => {
@@ -86,7 +91,7 @@ const setTimingsDataWith =
 			);
 			const endTime = getEndTime(frontTime, current?.estimated_duration);
 			const backTime = getBackTime(
-				previous?.back_time ?? endAirTime,
+				previous?.back_time ?? endAirTime, // TODO this is wrong
 				previous?.estimated_duration ?? current.estimated_duration,
 			);
 
@@ -120,7 +125,18 @@ const getBackTime = (previousBackTime?: TimeInMs | null, previousEstimatedDurati
 	return previousBackTime - previousEstimatedDuration;
 };
 
-export const getTableData = () => {
+export type Row = {
+	id: string;
+	title: string;
+	subTitle: string;
+	estimated_duration: number;
+	front_time: number | null;
+	end_time: number | null;
+	back_time: number | null;
+	children?: Row[];
+};
+
+export const getTableData = (): Row[] => {
 	const timings = calculateTimings(episodeData, timingsData);
 
 	return Object.entries(episodeData.part).map(([partId, partData], index) => {
@@ -132,8 +148,7 @@ export const getTableData = () => {
 			subTitle: `Part ${index + 1}`,
 			...partTimings,
 			children: partData.items.map((itemId) => {
-				// @ts-expect-error fix key
-				const itemData = episodeData.item[itemId];
+				const itemData = episodeData.item[itemId as keyof typeof episodeData.item];
 				const itemTimings = timings.item[itemId];
 
 				return {

@@ -1,5 +1,8 @@
 <script lang="ts">
-	const props: { row: any; column: any; isChild: boolean } = $props();
+	import type { Row } from '$lib/timings';
+	import type { Column } from './types';
+
+	const props: { row: Row; column: Column<Row>; isChild: boolean } = $props();
 	const CellComponent = props.column.cell;
 </script>
 

@@ -1,7 +1,9 @@
 <script lang="ts">
+	import type { Row } from '$lib/timings';
 	import TableRow from './TableRow.svelte';
+	import type { Column } from './types';
 
-	const props: { columns: any[]; data: any[] } = $props();
+	const props: { columns: Column<Row>[]; data: Row[] } = $props();
 
 	/**
 	 * Collapsed state to keep track of which rows are open/closed
@@ -20,7 +22,7 @@
 	};
 </script>
 
-{#each props.data as row, index}
+{#each props.data as row}
 	<TableRow
 		depth={1}
 		{row}
@@ -30,11 +32,11 @@
 		rowNumber={1}
 	/>
 
-	{#if row.children.length > 0 && rowOpenState[row.id]}
-		{#each row.children as row, childIndex}
+	{#if row.children && row?.children?.length > 0 && rowOpenState[row.id]}
+		{#each row.children as childRow}
 			<TableRow
 				depth={2}
-				{row}
+				row={childRow}
 				columns={props.columns}
 				rowNumber={1}
 				{rowOpenState}
