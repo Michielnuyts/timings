@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { calculateTimings } from '$lib';
 	import timingsData from '../data/timings.json';
-	import episodeData from '../data/episode.json';
 	import Table from '../components/Table/Table.svelte';
+	import { timestampToHoursAndMinutes } from '$lib/utils';
 
-	const result = calculateTimings(episodeData, timingsData);
+	const startTime = timestampToHoursAndMinutes(timingsData.episode.on_air_time);
+	const endTime = timestampToHoursAndMinutes(timingsData.episode.off_air_time);
 </script>
 
-<div class="p-4">
-	<Table tableData={episodeData} />
+<div class="flex flex-col gap-8 p-4">
+	<div class="flex gap-4 px-8">
+		<p>Start: {startTime}</p>
+		<p>End: {endTime}</p>
+	</div>
+	<Table />
 </div>

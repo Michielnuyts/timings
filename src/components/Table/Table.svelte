@@ -39,7 +39,6 @@
 	];
 
 	const data = getTableData();
-	console.log(data);
 </script>
 
 <div class="flex flex-col">
