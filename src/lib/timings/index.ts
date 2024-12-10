@@ -1,4 +1,4 @@
-import type { Episode, TimeInMs, Timings } from './types';
+import type { Episode, DurationInMs, Timings } from './types';
 import episodeData from '../../data/episode.json';
 import timingsData from '../../data/timings.json';
 
@@ -74,14 +74,17 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 	});
 };
 
-const getFrontTime = (previousFrontTime: TimeInMs, previousEstimatedDuration: TimeInMs) => {
+const getFrontTime = (previousFrontTime: DurationInMs, previousEstimatedDuration: DurationInMs) => {
 	return previousFrontTime + previousEstimatedDuration;
 };
 
-const getEndTime = (frontTime: TimeInMs, estimatedDuration: TimeInMs) =>
+const getEndTime = (frontTime: DurationInMs, estimatedDuration: DurationInMs) =>
 	frontTime + estimatedDuration;
 
-const getBackTime = (previousBackTime?: TimeInMs | null, previousEstimatedDuration?: TimeInMs) => {
+const getBackTime = (
+	previousBackTime?: DurationInMs | null,
+	previousEstimatedDuration?: DurationInMs,
+) => {
 	if (!previousBackTime || !previousEstimatedDuration) {
 		return 0;
 	}
@@ -89,6 +92,9 @@ const getBackTime = (previousBackTime?: TimeInMs | null, previousEstimatedDurati
 	return previousBackTime - previousEstimatedDuration;
 };
 
+/**
+ * Table specific data
+ */
 export type Row = {
 	id: string;
 	title: string;

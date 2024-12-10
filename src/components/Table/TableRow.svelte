@@ -23,6 +23,7 @@
 	</div>
 {/snippet}
 
+<!-- empty placeholder for deepest level rows -->
 {#snippet placeholder()}
 	<div class="w-[80px]"></div>
 {/snippet}

@@ -1,23 +1,23 @@
 export type Timestamp = number;
-export type TimeInMs = number;
+export type DurationInMs = number;
 
 export interface Part {
 	/**
 	 * Projected length of the section.
 	 */
-	estimated_duration: TimeInMs;
+	estimated_duration: DurationInMs;
 	/**
 	 * Indicates the scheduled start time of a Part or Item.
 	 */
-	front_time: TimeInMs | null;
+	front_time: DurationInMs | null;
 	/**
 	 * Indicates the scheduled end time of a Part or Item.
 	 */
-	end_time: TimeInMs | null;
+	end_time: DurationInMs | null;
 	/**
 	 * Indicates the necessary start time to ensure the show ends on schedule.
 	 */
-	back_time: TimeInMs | null;
+	back_time: DurationInMs | null;
 }
 
 export interface Item extends Part {}
