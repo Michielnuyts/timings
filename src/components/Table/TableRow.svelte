@@ -1,15 +1,16 @@
 <script lang="ts">
+	import type { Row } from '$lib/timings';
 	import ChevronDown from '../Icons/ChevronDown.svelte';
 	import ChevronRight from '../Icons/ChevronRight.svelte';
 	import TableCell from './TableCell.svelte';
+	import type { Column } from './types';
 
 	const props: {
 		depth: number;
-		rowOpenState: any;
-		row: any;
-		columns: any[];
-		toggleRowCollapsedState: any;
-		rowNumber?: number;
+		rowOpenState: Record<string, boolean>;
+		row: Row;
+		columns: Column<Row>[];
+		toggleRowCollapsedState: (rowId: string) => void;
 	} = $props();
 </script>
 
