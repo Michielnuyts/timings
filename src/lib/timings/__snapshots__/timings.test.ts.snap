@@ -1,0 +1,68 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`timings data gets calculated correctly 1`] = `
+{
+  "episode": {
+    "off_air_time": 1712238300000,
+    "on_air_time": 1712235600000,
+  },
+  "item": {
+    "1b165733-a0f1-45a0-a814-4f80a95ec896": {
+      "back_time": 1712238300000,
+      "end_time": 1712238300000,
+      "estimated_duration": 600000,
+      "front_time": 1712237700000,
+    },
+    "2159c445-e6ee-4109-9829-f47dc89b9372": {
+      "back_time": 1712236200000,
+      "end_time": 1712236200000,
+      "estimated_duration": 300000,
+      "front_time": 1712235900000,
+    },
+    "325371fc-cd1d-44d8-9527-d645b14066c4": {
+      "back_time": 1712236500000,
+      "end_time": 1712236800000,
+      "estimated_duration": 600000,
+      "front_time": 1712236200000,
+    },
+    "501e36a2-9a7b-4c12-b43f-89738ddb9644": {
+      "back_time": 1712237700000,
+      "end_time": 1712237700000,
+      "estimated_duration": 600000,
+      "front_time": 1712237100000,
+    },
+    "872c3197-7c8c-4029-a4ff-f76ba944074b": {
+      "back_time": 1712235600000,
+      "end_time": 1712235900000,
+      "estimated_duration": 300000,
+      "front_time": 1712235600000,
+    },
+    "c7155479-00be-497f-abb8-f6a0f713a000": {
+      "back_time": 1712237100000,
+      "end_time": 1712237100000,
+      "estimated_duration": 300000,
+      "front_time": 1712236800000,
+    },
+  },
+  "part": {
+    "14080af8-7712-47be-8802-22a0fb83cf59": {
+      "back_time": 1712235600000,
+      "end_time": 1712236200000,
+      "estimated_duration": 600000,
+      "front_time": 1712235600000,
+    },
+    "a6cbf456-095e-4393-b79b-fd397d464bf3": {
+      "back_time": 1712237700000,
+      "end_time": 1712238300000,
+      "estimated_duration": 600000,
+      "front_time": 1712237700000,
+    },
+    "cb17be19-85ff-4368-8fa3-cbf281c902d8": {
+      "back_time": 1712236200000,
+      "end_time": 1712237700000,
+      "estimated_duration": 1500000,
+      "front_time": 1712236200000,
+    },
+  },
+}
+`;
