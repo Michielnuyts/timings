@@ -17,10 +17,14 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 	let previousPartId: string | undefined = undefined;
 	let previousItemId: string | undefined = undefined;
 
-	episodeData.episode.parts.forEach((partId, partIndex) => {
+	const parts = episodeData.episode.parts;
+
+	parts.forEach((partId, partIndex) => {
 		const isFirstPart = partIndex === 0;
+		const isLastPart = partIndex === parts.length - 1;
 		const currentPart = timingsData.part[partId];
 		const previousPart = previousPartId ? timingsData.part[previousPartId] : undefined;
+
 		const frontTime = isFirstPart
 			? startAirTime
 			: getFrontTime(
@@ -28,10 +32,11 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 					previousPart?.estimated_duration ?? currentPart.estimated_duration,
 				);
 		const endTime = getEndTime(frontTime, currentPart.estimated_duration);
-		const backTime = getBackTime(
-			previousPart?.back_time ?? endAirTime,
-			previousPart?.estimated_duration ?? currentPart.estimated_duration,
-		);
+
+		const backTime = isLastPart
+			? endAirTime - currentPart.estimated_duration
+			: getBackTime(previousPart?.back_time ?? startAirTime, previousPart?.estimated_duration ?? 0);
+
 		const partWithTimings = {
 			...currentPart,
 			front_time: frontTime,
@@ -48,6 +53,7 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 			const isLastItem = itemIndex === items.length - 1;
 			const currentItem = timingsData.item[itemId];
 			const previousItem = previousItemId ? timingsData.item[previousItemId] : undefined;
+
 			const frontTime = isFirstItem
 				? partWithTimings.front_time
 				: getFrontTime(
@@ -55,11 +61,12 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 						previousItem?.estimated_duration ?? currentItem.estimated_duration,
 					);
 			const endTime = getEndTime(frontTime, currentItem.estimated_duration);
+
 			const backTime = isLastItem
 				? partWithTimings.end_time
 				: getBackTime(
-						previousItem?.back_time ?? endAirTime,
-						previousItem?.estimated_duration ?? currentItem.estimated_duration,
+						previousItem?.back_time ?? partWithTimings.back_time,
+						previousItem?.estimated_duration ?? partWithTimings.estimated_duration,
 					);
 
 			timingsData.item[itemId] = {
@@ -74,23 +81,14 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 	});
 };
 
-const getFrontTime = (previousFrontTime: DurationInMs, previousEstimatedDuration: DurationInMs) => {
-	return previousFrontTime + previousEstimatedDuration;
-};
+const getFrontTime = (previousFrontTime: DurationInMs, previousEstimatedDuration: DurationInMs) =>
+	previousFrontTime + previousEstimatedDuration;
 
 const getEndTime = (frontTime: DurationInMs, estimatedDuration: DurationInMs) =>
 	frontTime + estimatedDuration;
 
-const getBackTime = (
-	previousBackTime?: DurationInMs | null,
-	previousEstimatedDuration?: DurationInMs,
-) => {
-	if (!previousBackTime || !previousEstimatedDuration) {
-		return 0;
-	}
-
-	return previousBackTime - previousEstimatedDuration;
-};
+const getBackTime = (previousBackTime: DurationInMs, previousEstimatedDuration: DurationInMs) =>
+	previousBackTime + previousEstimatedDuration;
 
 /**
  * Table specific data
