@@ -6,6 +6,7 @@
 	import TableBody from './TableBody.svelte';
 	import DurationCell from './Cells/DurationCell.svelte';
 	import type { Column } from './types';
+	import { cellWidth, leftPlaceholderWidth } from './config';
 
 	const columns: Column<Row>[] = [
 		{
@@ -45,9 +46,11 @@
 
 <div class="flex flex-col">
 	<div class="flex flex-row">
-		<div class="w-[80px]"></div>
+		<div class={`w-[${leftPlaceholderWidth}px]`}></div>
 		{#each columns as column}
-			<div class="w-[180px] border-b-2 bg-slate-300 p-2 text-slate-700">{column.header}</div>
+			<div class={`w-[${cellWidth}px] border-b-2 bg-slate-300 p-2 text-slate-700`}>
+				{column.header}
+			</div>
 		{/each}
 	</div>
 

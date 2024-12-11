@@ -3,6 +3,7 @@
 	import IconButton from '../IconButton/IconButton.svelte';
 	import ChevronDown from '../Icons/ChevronDown.svelte';
 	import ChevronRight from '../Icons/ChevronRight.svelte';
+	import { leftPlaceholderWidth } from './config';
 	import TableCell from './TableCell.svelte';
 	import type { Column } from './types';
 
@@ -25,7 +26,7 @@
 
 <!-- empty placeholder for deepest level rows -->
 {#snippet placeholder()}
-	<div class="w-[80px]"></div>
+	<div class={`w-[${leftPlaceholderWidth}px]`}></div>
 {/snippet}
 
 <div class="flex flex-row items-center">

@@ -1,13 +1,16 @@
 <script lang="ts">
 	import type { Row } from '$lib/timings';
+	import { cellWidth } from './config';
 	import type { Column } from './types';
 
-	const props: { row: Row; column: Column<Row>; isChild: boolean } = $props();
-	const CellComponent = props.column.cell;
+	const { row, column, isChild }: { row: Row; column: Column<Row>; isChild: boolean } = $props();
+	const CellComponent = column.cell;
 </script>
 
 <div
-	class={`flex w-[180px] flex-row border-b border-slate-950 ${props.isChild ? 'bg-slate-300' : 'bg-slate-400'} p-2`}
+	class={`flex w-[${cellWidth}px] flex-row border-b border-slate-950 p-2`}
+	class:bg-slate-300={isChild}
+	class:bg-slate-400={!isChild}
 >
-	<CellComponent value={props.row[props.column.key]} />
+	<CellComponent value={row[column.key]} />
 </div>

@@ -66,7 +66,7 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 				? partWithTimings.end_time
 				: getBackTime(
 						previousItem?.back_time ?? partWithTimings.back_time,
-						previousItem?.estimated_duration ?? partWithTimings.estimated_duration,
+						previousItem?.estimated_duration ?? 0,
 					);
 
 			timingsData.item[itemId] = {
