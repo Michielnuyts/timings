@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Row } from '$lib/timings';
+	import type { Row } from '$lib/timings/types';
 	import { cellWidth } from './config';
 	import type { Column } from './types';
 
