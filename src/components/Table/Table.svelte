@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTableData, type Row } from '$lib/timings';
+	import { getTableData } from '$lib/timings/getTableData';
 	import TagCell from './Cells/TagCell.svelte';
 	import TextCell from './Cells/TextCell.svelte';
 	import DateTimeCell from './Cells/DateTimeCell.svelte';
@@ -7,6 +7,7 @@
 	import DurationCell from './Cells/DurationCell.svelte';
 	import type { Column } from './types';
 	import { cellWidth, leftPlaceholderWidth } from './config';
+	import type { Row } from '$lib/timings/types';
 
 	const columns: Column<Row>[] = [
 		{

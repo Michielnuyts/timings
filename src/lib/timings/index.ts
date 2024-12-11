@@ -1,6 +1,4 @@
 import type { Episode, DurationInMs, Timings } from './types';
-import episodeData from '../../data/episode.json';
-import timingsData from '../../data/timings.json';
 
 export const calculateTimings = (episodeData: Episode, timingsData: Timings) => {
 	const clonedTimingsData = structuredClone(timingsData);
@@ -81,51 +79,20 @@ const setTimingsData = (episodeData: Episode, timingsData: Timings) => {
 	});
 };
 
+// - Front Time: Previous Front Time + Previous Estimated Duration` which is also equals to the previous End Time.
+//     - The Front Time of the first Part in an Episode is the same as the (Episode) On Air Time.
+//     - The Front Time of the first Item in a Part is the same as the Front Time of the Part it belongs to.
 const getFrontTime = (previousFrontTime: DurationInMs, previousEstimatedDuration: DurationInMs) =>
 	previousFrontTime + previousEstimatedDuration;
 
+// - End Time: Front Time + Estimated Duration
+//     - The End Time of the first Part in an Episode is the same as the (Episode) On Air Time + Part Estimated Duration
+//     - The Front Time of the first Item in a Part is the same as the Front Time of the Part it belongs to.
 const getEndTime = (frontTime: DurationInMs, estimatedDuration: DurationInMs) =>
 	frontTime + estimatedDuration;
 
+// - Back Time: Previous Back Time - Previous Estimated Duration
+//     - The Back Time of the last Part in an Episode is the same as the (Episode) Off Air Time - Part Estimated Duration
+//     - The Back Time of the last Item in a Part is the same as the End Time of the Part it belongs to.
 const getBackTime = (previousBackTime: DurationInMs, previousEstimatedDuration: DurationInMs) =>
 	previousBackTime + previousEstimatedDuration;
-
-/**
- * Table specific data
- */
-export type Row = {
-	id: string;
-	title: string;
-	subTitle: string;
-	estimated_duration: number;
-	front_time: number | null;
-	end_time: number | null;
-	back_time: number | null;
-	children?: Row[];
-};
-
-export const getTableData = (): Row[] => {
-	const timings = calculateTimings(episodeData, timingsData);
-
-	return Object.entries(episodeData.part).map(([partId, partData], index) => {
-		const partTimings = timings.part[partId];
-
-		return {
-			...partData,
-			title: 'Part',
-			subTitle: `Part ${index + 1}`,
-			...partTimings,
-			children: partData.items.map((itemId) => {
-				const itemData = episodeData.item[itemId as keyof typeof episodeData.item];
-				const itemTimings = timings.item[itemId];
-
-				return {
-					...itemData,
-					title: 'Item',
-					subTitle: itemData.title,
-					...itemTimings,
-				};
-			}),
-		};
-	});
-};

@@ -56,3 +56,17 @@ export interface Timings {
 		[ItemId: string]: Item;
 	};
 }
+
+/**
+ * Table specific data
+ */
+export type Row = {
+	id: string;
+	title: string;
+	subTitle: string;
+	estimated_duration: number;
+	front_time: number | null;
+	end_time: number | null;
+	back_time: number | null;
+	children?: Row[];
+};

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Row } from '$lib/timings';
+	import type { Row } from '$lib/timings/types';
 	import type { Column } from './types';
 	import TableRow from './TableRow.svelte';
 

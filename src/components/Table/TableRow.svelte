@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Row } from '$lib/timings';
+	import type { Row } from '$lib/timings/types';
 	import IconButton from '../IconButton/IconButton.svelte';
 	import ChevronDown from '../Icons/ChevronDown.svelte';
 	import ChevronRight from '../Icons/ChevronRight.svelte';
